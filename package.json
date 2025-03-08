@@ -1,0 +1,36 @@
+{
+  "name": "iot-dashboard-backend",
+  "version": "1.0.0",
+  "description": "Backend for WEST IoT Dashboard",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sai-teja-kst/iot-dashboard-backend.git"
+  },
+  "keywords": [
+    "iot",
+    "west",
+    "backend"
+  ],
+  "author": "sai-teja-kst",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sai-teja-kst/iot-dashboard-backend/issues"
+  },
+  "homepage": "https://github.com/sai-teja-kst/iot-dashboard-backend#readme",
+  "dependencies": {
+    "@azure/event-hubs": "^5.12.2",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongodb": "^6.14.2",
+    "mongoose": "^8.12.1",
+    "nodemon": "^3.1.9",
+    "socket.io": "^4.8.1",
+    "ws": "^8.18.1"
+  }
+}
