@@ -19,6 +19,6 @@ datacollector();
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use("/west/v1/", apiroutes);
+app.use("/api/v1/west", apiroutes);
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

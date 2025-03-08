@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { listdata } = require("../controllers/apicontroller");
+const { listalldata, timebasedata } = require("../controllers/apicontroller");
 
-router.get("/list", listdata);
+router.get("/list", listalldata);
+
+router.get("/timestamp", timebasedata);
 
 module.exports = router;
