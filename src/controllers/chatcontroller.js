@@ -9,51 +9,59 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_AI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 const generateMongoQuery = async (query) => {
-    const prompt = `${AGENT_PREFIX_PROMPT}\n\nUser Question: ${query}`;
+  const prompt = `${AGENT_PREFIX_PROMPT}\n\nUser Question: ${query}`;
+
+  try {
+    const result = await model.generateContent(prompt);
+    const textOutput = await result.response.text();
+    let responseText = textOutput.trim();
+
+    const jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/);
+    if (jsonMatch) {
+      responseText = jsonMatch[1].trim();
+    }
+
+    if (!responseText.startsWith("[") || !responseText.endsWith("]")) {
+      throw new Error("Generated content is not a valid JSON array.");
+    }
+
+    let parsedQuery;
 
     try {
-      const result = await model.generateContent(prompt);
-
-      if (!result || !result.response || typeof result.response.text !== "function") {
-        throw new Error("Invalid response format from AI model.");
-      }
-
-      let responseText = result.response.text().trim();
-      const jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/);
-      if (jsonMatch) {
-        responseText = jsonMatch[1];
-      }
-
-      if (!responseText.startsWith("[") || !responseText.endsWith("]")) {
-        throw new Error("Generated query is not a valid JSON aggregation pipeline array.");
-      }
-
-      const parsedQuery = JSON.parse(responseText);
-
-      if (!Array.isArray(parsedQuery)) {
-        throw new Error("Generated query is not an array.");
-      }
-
-      return parsedQuery;
-    } catch (error) {
-      console.error("MongoDB Query Generation Error:", error);
-      return [];
+      parsedQuery = JSON.parse(responseText);
+    } catch (parseError) {
+      console.error("JSON Parse Error:", parseError.message);
+      throw new Error("AI returned malformed JSON. Check formatting.");
     }
-  };
 
+    if (!Array.isArray(parsedQuery) || parsedQuery.length === 0) {
+      throw new Error("Generated query is not a valid non-empty array.");
+    }
 
-const userquery = async (req, res) => {
+    return parsedQuery;
+  } catch (error) {
+    console.error("MongoDB Query Generation Error:", error.message);
+    return [];
+  }
+};
+
+  const userquery = async (req, res) => {
     const { query } = req.body;
 
     try {
-        const mongoQuery = await generateMongoQuery(query);
-        const queryResult = await westData.aggregate(mongoQuery);
-        res.json({ data: queryResult });
+      const mongoQuery = await generateMongoQuery(query);
+
+      if (!mongoQuery || mongoQuery.length === 0) {
+        return res.status(400).json({ error: "Failed to generate a valid MongoDB query." });
+      }
+
+      const queryResult = await westData.aggregate(mongoQuery);
+      res.json({ data: queryResult });
     } catch (error) {
-        console.error("MongoDB Query Error:", error);
-        res.status(500).json({ error: error.message });
+      console.error("MongoDB Query Error:", error.message);
+      res.status(500).json({ error: "Internal Server Error. Please try again later." });
     }
-};
+  };
 
 const newchat = async (req, res) => {
   try {

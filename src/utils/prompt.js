@@ -67,6 +67,8 @@ const AGENT_PREFIX_PROMPT = `You are an AI assistant that converts natural langu
 ✅ **Ensure timestamp filters use \`$dateSubtract\` properly.**
 ✅ **Generate only valid JSON arrays—NO extra text, explanations, or markdown formatting.**
 
+"Do not include any comments (//) inside the JSON output."
+
 Now, generate the correct MongoDB aggregation query.`;
 
 module.exports = { AGENT_PREFIX_PROMPT };
