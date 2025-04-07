@@ -21,7 +21,7 @@ initializeSocket(server);
 connectDB();
 //dataseeding();
 //datacollector();
-//datapublish();
+datapublish();
 
 app.use(cors());
 app.use(bodyParser.json());
