@@ -1,44 +1,5 @@
 const vehicleData = require("../models/vehiclemodel");
 
-const getvehicleinfo = async (req, res) => {
-    try {
-        const vin = req.query.vin;
-        const result = await vehicleData
-            .find({ vin })
-            .sort({ created: -1 })
-            .limit(1)
-
-        if (result.length === 0) {
-            return res.status(404).json({ message: "Vehicle not found" });
-        }
-
-        res.status(200).json(result[0]);
-    } catch (err) {
-        res.status(500).json({ message: "Internal server error" });
-    }
-};
-
-const getzoneinfo = async (req, res) => {
-  try {
-    const zone = req.query.zone;
-
-    if (!zone) {
-      return res.status(400).json({ message: "Zone is required" });
-    }
-
-    const data = await vehicleData.find({ zone });
-
-    if (data.length === 0) {
-      return res.status(404).json({ message: "No data found for this zone" });
-    }
-
-    res.status(200).json({ data });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-
 const getinfo = async (req, res) => {
   try {
     const { zone, vin } = req.query;

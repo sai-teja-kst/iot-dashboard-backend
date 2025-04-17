@@ -9,8 +9,7 @@ const http = require("http");
 const { initializeSocket } = require("./src/utils/socket");
 require("dotenv").config();
 
-const { datapublish } = require("./src/utils/datapublish");
-//const {dataseeding} = require("./src/utils/dataseeding");
+//const { datapublish } = require("./src/utils/datapublish");
 //const datacollector = require("./src/utils/datacollector");
 //const { seed } = require("./src/utils/seed");
 

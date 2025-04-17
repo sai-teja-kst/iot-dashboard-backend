@@ -15,13 +15,13 @@ const VehicleSchema = new mongoose.Schema({
         type: String,
         unique: true,
         required: true,
-        maxlength: 18, // Restrict VIN length to 18 characters
-        minlength: 18, // Ensure VIN is exactly 18 characters
+        maxlength: 18,
+        minlength: 18,
     },
     chasis: {
         type: String,
-        maxlength: 10, // Restrict Chasis length to 10 characters
-        minlength: 10, // Ensure Chasis is exactly 10 characters
+        maxlength: 10,
+        minlength: 10,
     },
     operator: {
         type: String,
