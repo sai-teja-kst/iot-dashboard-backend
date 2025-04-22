@@ -20,7 +20,7 @@ const datapublish = async () => {
 
       if (data) {
         await westDataController(data);
-        //console.log(data);
+        console.log(data);
       }
     });
   } catch (err) {
